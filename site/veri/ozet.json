@@ -1,0 +1,163 @@
+{
+ "meta": {
+  "gunler": [
+   "2026-11-03"
+  ],
+  "gun_tipleri": {
+   "2026-11-03": "hafta içi"
+  },
+  "kapsam_saat": 2.0,
+  "kalkis": 111,
+  "gecis": 6798,
+  "esik": {
+   "kalkis": 40,
+   "gun": 5,
+   "dakik": [
+    -1.0,
+    5.0
+   ]
+  }
+ },
+ "hatlar": [
+  {
+   "hat": "500T",
+   "ad": "TUZLA ŞİFA MAHALLESİ - 4. LEVENT METRO",
+   "gun": 1,
+   "kalkis": 26,
+   "sapma_medyan": 1.2,
+   "sapma_p90": 5.1,
+   "dakik": 81,
+   "gec5": 12,
+   "planli": 13,
+   "gozlenen": 12,
+   "yeterli": false,
+   "bekleme_fazla": 1.4
+  },
+  {
+   "hat": "15F",
+   "ad": "BEYKOZ - KADIKÖY",
+   "gun": 1,
+   "kalkis": 10,
+   "sapma_medyan": 0.8,
+   "sapma_p90": 10.0,
+   "dakik": 70,
+   "gec5": 20,
+   "planli": 5,
+   "gozlenen": 5,
+   "yeterli": false,
+   "bekleme_fazla": 2.5
+  },
+  {
+   "hat": "76D",
+   "ad": "BAHÇEŞEHİR / ESENKENT - TAKSİM",
+   "gun": 1,
+   "kalkis": 27,
+   "sapma_medyan": 1.2,
+   "sapma_p90": 7.3,
+   "dakik": 70,
+   "gec5": 19,
+   "planli": 15,
+   "gozlenen": 15,
+   "yeterli": false,
+   "bekleme_fazla": 0.9
+  },
+  {
+   "hat": "146T",
+   "ad": "BOĞAZKÖY / BAHÇEŞEHİR - YENİKAPI",
+   "gun": 1,
+   "kalkis": 14,
+   "sapma_medyan": 0.4,
+   "sapma_p90": 1.0,
+   "dakik": 93,
+   "gec5": 0,
+   "planli": 8,
+   "gozlenen": 7,
+   "yeterli": false,
+   "bekleme_fazla": 1.4
+  },
+  {
+   "hat": "40T",
+   "ad": "İSTİNYE DEREİÇİ - TAKSİM",
+   "gun": 1,
+   "kalkis": 10,
+   "sapma_medyan": 0.6,
+   "sapma_p90": 5.2,
+   "dakik": 70,
+   "gec5": 10,
+   "planli": 6,
+   "gozlenen": 5,
+   "yeterli": false,
+   "bekleme_fazla": 1.7
+  },
+  {
+   "hat": "25E",
+   "ad": "SARIYER - BALTALİMANI",
+   "gun": 1,
+   "kalkis": 9,
+   "sapma_medyan": 0.9,
+   "sapma_p90": 5.0,
+   "dakik": 89,
+   "gec5": 11,
+   "planli": 7,
+   "gozlenen": 6,
+   "yeterli": false,
+   "bekleme_fazla": 1.2
+  },
+  {
+   "hat": "28",
+   "ad": "TOPKAPI / EDİRNEKAPI - BEŞİKTAŞ",
+   "gun": 1,
+   "kalkis": 2,
+   "sapma_medyan": 8.6,
+   "sapma_p90": 14.9,
+   "dakik": 50,
+   "gec5": 50,
+   "planli": 2,
+   "gozlenen": 0,
+   "yeterli": false,
+   "bekleme_fazla": null
+  },
+  {
+   "hat": "30D",
+   "ad": "ORTAKÖY DEREBOYU - YENİKAPI",
+   "gun": 1,
+   "kalkis": 9,
+   "sapma_medyan": 2.7,
+   "sapma_p90": 15.5,
+   "dakik": 56,
+   "gec5": 44,
+   "planli": 5,
+   "gozlenen": 5,
+   "yeterli": false,
+   "bekleme_fazla": -0.6
+  },
+  {
+   "hat": "59R",
+   "ad": "RUMELİ HİSARÜSTÜ - ŞİŞLİ",
+   "gun": 1,
+   "kalkis": 2,
+   "sapma_medyan": 1.3,
+   "sapma_p90": 2.0,
+   "dakik": 100,
+   "gec5": 0,
+   "planli": 2,
+   "gozlenen": 1,
+   "yeterli": false,
+   "bekleme_fazla": null
+  },
+  {
+   "hat": "2",
+   "ad": "BOSTANCI - HAREM",
+   "gun": 1,
+   "kalkis": 2,
+   "sapma_medyan": -1.0,
+   "sapma_p90": -0.0,
+   "dakik": 50,
+   "gec5": 0,
+   "planli": 1,
+   "gozlenen": 1,
+   "yeterli": false,
+   "bekleme_fazla": null
+  }
+ ]
+}

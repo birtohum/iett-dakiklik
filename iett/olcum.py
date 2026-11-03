@@ -275,7 +275,7 @@ def gun_olc(gun_str, ham_dosya, statik_dizin, plan_dizin):
     for s in seferler:
         v = statik.get(s["hat"], {}).get(s["guzergah"])
         kayit = {
-            "hat": s["hat"], "guzergah": s["guzergah"], "kapino": s["kapino"],
+            "id": len(kayitlar), "hat": s["hat"], "guzergah": s["guzergah"], "kapino": s["kapino"],
             "ilk": s["noktalar"][0][0].strftime("%H:%M:%S"),
             "son": s["noktalar"][-1][0].strftime("%H:%M:%S"),
             "nokta": len(s["noktalar"]),
@@ -299,7 +299,7 @@ def gun_olc(gun_str, ham_dosya, statik_dizin, plan_dizin):
             kalkislar[s["guzergah"]].append(kayit)
         for durak, t, aralik in durak_gecisleri(iz, v["duraklar"]):
             gecisler.append({
-                "hat": s["hat"], "guzergah": s["guzergah"], "kapino": s["kapino"],
+                "sefer": kayit["id"], "hat": s["hat"], "guzergah": s["guzergah"], "kapino": s["kapino"],
                 "durak": durak, "t": t.strftime("%H:%M:%S"), "aralik_sn": round(aralik),
             })
     # planla eşleştir
@@ -321,4 +321,7 @@ def gun_olc(gun_str, ham_dosya, statik_dizin, plan_dizin):
                 gz[j]["sapma_dk"] = round(gd[j] - dakikalar[i], 1)
             for i, d in enumerate(dakikalar):
                 planlar.append({"hat": hat, "guzergah": g, "plan": f"{d // 60:02d}:{d % 60:02d}", "eslesti": i in eslenen})
-    return {"gun": gun_str, "gun_tipi": tip, "seferler": kayitlar, "gecisler": gecisler, "planlar": planlar}
+    # kapsam: filo verisi alınan dakikalar (toplayıcının çalıştığı süre)
+    kapsam = sorted({r[0][:5] for r in satirlar if r[1] == "F"})
+    return {"gun": gun_str, "gun_tipi": tip, "seferler": kayitlar, "gecisler": gecisler,
+            "planlar": planlar, "kapsam": kapsam}

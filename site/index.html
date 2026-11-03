@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Otobüs Dakikliği İstanbul</title>
+<meta name="description" content="İETT otobüslerinin planlanan kalkış saatlerine uyumu ve duraklarda bekleme; açık veriden, kendi ölçümümüz.">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="stil.css">
+</head>
+<body>
+<header class="ust">
+  <div class="kap">
+    <p class="ust-etiket">Açık veriyle ölçüm · İETT</p>
+    <h1>İstanbul otobüsleri planına ne kadar uyuyor?</h1>
+    <p class="giris">İETT'nin planlanan kalkış saatlerini otobüslerin dakikada bir yayımlanan konumlarıyla
+      karşılaştırıyoruz: hat başından ne zaman kalkıyorlar, duraklarda ne kadar bekletiyorlar.</p>
+    <div id="durum" class="durum" role="status"></div>
+  </div>
+</header>
+
+<main class="kap">
+  <section aria-labelledby="b-hatlar">
+    <div class="bolum-bas">
+      <h2 id="b-hatlar">Hatlar</h2>
+      <p class="not" id="siralama-notu"></p>
+    </div>
+    <div class="tablo-kap">
+      <table id="hatlar" class="tablo">
+        <thead>
+          <tr>
+            <th scope="col">Hat</th>
+            <th scope="col" class="sayi" title="Planla eşleşen kalkış sayısı">Kalkış</th>
+            <th scope="col" class="sayi" title="Planlanan saate göre medyan; + geç">Medyan sapma</th>
+            <th scope="col" class="sayi" title="1 dk erken ile 5 dk geç arasında kalkanların payı">Dakik</th>
+            <th scope="col" class="sayi gizle-dar" title="Gözlem süresi içinde planlanan kalkışlardan gözlenen bir kalkışla eşleşenler">Gözlenen / planlı</th>
+            <th scope="col" class="sayi gizle-dar" title="Duraklarda tahmini bekleme, plana göre fazlası (medyan durak)">Fazladan bekleme</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="detay" aria-labelledby="b-detay" hidden>
+    <div class="bolum-bas">
+      <h2 id="b-detay"><span id="d-hat"></span> <span id="d-ad" class="soluk"></span></h2>
+      <label class="secici">Hat
+        <select id="hat-sec" aria-label="Hat seç"></select>
+      </label>
+    </div>
+    <div class="kartlar" id="d-kartlar"></div>
+
+    <div class="iki">
+      <figure class="kutu">
+        <figcaption>
+          <strong>Saat saat kalkış sapması</strong>
+          <span class="not">Planlanan kalkışa göre; çubuk medyan, çizgi çeyrekler arası. Altındaki sayı: kalkış adedi.</span>
+        </figcaption>
+        <div id="g-sapma" class="grafik"></div>
+      </figure>
+      <figure class="kutu">
+        <figcaption>
+          <strong>Durakta tahmini bekleme</strong>
+          <span class="not">Rastgele gelen yolcu için ortalama, tüm duraklar; dolu: gözlenen, çizgi: plana göre.</span>
+        </figcaption>
+        <div id="g-bekleme" class="grafik"></div>
+      </figure>
+    </div>
+
+    <figure class="kutu">
+      <figcaption>
+        <strong>Harita</strong>
+        <span class="not">Durak rengi gözlenen tahmini beklemeyi gösterir. Durağa dokunun.</span>
+      </figcaption>
+      <div id="harita" role="region" aria-label="Hat haritası"></div>
+      <div class="lejant" id="lejant"></div>
+    </figure>
+  </section>
+
+  <section class="yontem" aria-labelledby="b-yontem">
+    <h2 id="b-yontem">Nasıl ölçüyoruz</h2>
+    <ol>
+      <li><strong>Plan.</strong> İETT her güzergâh için yalnızca <em>hat başından kalkış</em> saatlerini yayımlıyor; ara duraklar için planlı saat yok. Bu yüzden "geç kaldı" ölçüsü hat başındaki kalkış için.</li>
+      <li><strong>Konum.</strong> Otobüs konumları dakikada bir yenileniyor. Her konumu güzergâh çizgisine izdüşürüp otobüsün hat başından çıktığı anı ve her duraktan geçtiği anı ara değerlemeyle buluyoruz.</li>
+      <li><strong>Eşleştirme.</strong> Gözlenen kalkışlar, aynı güzergâhın planlı kalkışlarıyla sırayı koruyarak eşleniyor (−10…+30 dk). "Dakik": 1 dk erken ile 5 dk geç arası.</li>
+      <li><strong>Bekleme.</strong> Bir durakta ardışık iki otobüs arasındaki süre <em>h</em> ise, rastgele gelen yolcunun ortalama beklemesi Σh²/(2Σh). Aralıklar düzensizleştikçe bekleme, otobüs sayısı aynı kalsa bile uzar. Planlı karşılığı aynı formülle, planlı kalkışlardan hesaplanıyor.</li>
+    </ol>
+    <h3>Sınırlar</h3>
+    <ul>
+      <li>Kalkış anı ±1 dk belirsiz (konum aralığı); dakika altı farklar yorumlanmamalı. Seyreltme testinde durak geçiş anı için hata medyan 4 sn, %90'ı 18 sn.</li>
+      <li>"Gözlenen / planlı" oranı <em>gelmeyen sefer</em> oranı değildir: GPS kesintisi, aracın eşlemeye geç girmesi ya da toplayıcının kapalı olması da eşleşmeyen sefer bırakır.</li>
+      <li>Konum servisi saatte 100 istekle sınırlı; bu yüzden şimdilik 10 hat izleniyor ve toplama yalnızca bilgisayar açıkken sürüyor. Gözlem saatleri yukarıda.</li>
+      <li>Hatlar arası sıralama, her hatta en az <span id="esik-kalkis"></span> kalkış ve <span id="esik-gun"></span> gün birikince gösteriliyor.</li>
+    </ul>
+  </section>
+</main>
+
+<footer class="alt">
+  <div class="kap">
+    <p>Kaynak: <a href="https://data.ibb.gov.tr">İBB Açık Veri Portalı</a> (İETT web servisleri, hat güzergâhları, duraklar), <a href="https://data.ibb.gov.tr/license">İBB Açık Veri Lisansı</a>. Bu site İBB ya da İETT'nin değildir; ölçümler bize aittir. Harita © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> katkıcıları.</p>
+  </div>
+</footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="uygulama.js"></script>
+</body>
+</html>
