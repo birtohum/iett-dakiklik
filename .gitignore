@@ -1,0 +1,8 @@
+veri/kaynak/
+veri/ham/
+veri/fizibilite_*.json
+.venv/
+__pycache__/
+*.part
+veri/*.log
+veri/_pencere_*

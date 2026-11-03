@@ -1,0 +1,41 @@
+Pencere: 09:59 – 11:53, 15705 konum, 144 araç
+Ardışık konumlar arası (sn): medyan 61, %10 53, %90 65
+Konum zamanı → bizim alış (sn): medyan 28, %90 32
+Gözlenen sefer parçası: 243; güzergâhı bilinen: 243
+Konumun güzergâh çizgisine dik uzaklığı (sefer medyanları, m): medyan 5, %90 26
+Çizgiye 150 m'den uzak ya da tutarsız diye atılan konum: 1311/14996 (%8.7)
+Kalkışı gözlenen sefer: 103; planla eşleşen: 102
+  bunların 8 tanesi geriye kestirim (araç hat başında görülmedi)
+Kalkış anını çevreleyen iki konum arası (sn): medyan 62, %90 68
+Kalkış sapması (dk, + geç): medyan 0.9, %10 -0.9, %90 5.9; −1…+5 dk içinde: %76
+Pencere içinde planlı kalkış: 68; gözlenen bir kalkışla eşleşen: 61 (%90)
+Hat | planlı | eşleşen | medyan sapma (dk)
+  146T  |   8 |   7 |   0.2
+  15F   |   7 |   7 |   0.8
+  2     |   1 |   1 |  -1.0
+  25E   |   7 |   6 |   0.8
+  28    |   3 |   1 |   8.6
+  30D   |   5 |   5 |   2.7
+  40T   |   7 |   6 |   0.5
+  500T  |  13 |  12 |   1.2
+  59R   |   2 |   1 |   1.3
+  76D   |  15 |  15 |   1.2
+Seyreltme testi (≈2 dk örnekleme vs ≈1 dk): durak geçişi |fark| medyan 4 sn, %90 18 sn, n=12834
+  kalkış |fark| medyan 4 sn, %90 46 sn, n=204
+Durak geçişi kaydı: 6634
+Örnek eşleşmeler (hat, güzergâh, kapı no, plan, gözlenen kalkış, sapma dk):
+  146T  146T_G_D0     B5077   10:04  10:04:08  +0.1
+  146T  146T_G_D0     B5033   11:06  11:05:37  -0.4
+  15F   15F_D_D0      M2142   09:55  10:03:55  +8.9
+  15F   15F_G_D0      M2590   11:05  11:06:11  +1.2
+  25E   25E_D_D0      A-001   10:20  10:20:37  +0.6
+  25E   25E_G_D0      A-001   11:40  11:40:35  +0.6
+  30D   30D_G_D0      B-221   10:36  10:36:12  +0.2
+  30D   30D_G_D0      B-216   11:48  11:50:44  +2.7
+  40T   40T_G_D3042   A-008   11:05  11:05:41  +0.7
+  500T  500T_G_D0     C-436   10:00  10:05:21  +5.4
+  500T  500T_G_D0     C-434   10:40  10:39:07  -0.9
+  500T  500T_D_D0     C-456   11:07  11:07:55  +0.9
+  500T  500T_D_D0     C-418   11:40  11:41:44  +1.7
+  76D   76D_G_D0      D-120   09:57  10:05:20  +8.3
+  76D   76D_D_D0      D-105   10:32  10:33:44  +1.7
