@@ -111,4 +111,4 @@ python -m venv .venv
 | `toplayici.py`, `hazirla.py`, `ozetle.py`, `site_uret.py` | iş akışı |
 | `araclar/` | fizibilite analizi, istek sınırı ölçümü |
 | `veri/ozet/` | günlük özetler (depoda). Ham konumlar (`veri/ham/`) depoya girmiyor. |
-| `site/` | statik site (HTML, CSS, JS; Leaflet ve OpenStreetMap karoları) |
+| `site/` | statik site: "durak tabelası" görünümü (HTML, CSS, JS; Leaflet + OpenStreetMap karoları, Google Fonts: Doto, Barlow). Paylaşım kartı tarayıcıda canvas ile çiziliyor. |

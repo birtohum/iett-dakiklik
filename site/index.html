@@ -3,104 +3,119 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Otobüs Dakikliği İstanbul</title>
-<meta name="description" content="İETT otobüslerinin planlanan kalkış saatlerine uyumu ve duraklarda bekleme; açık veriden, kendi ölçümümüz.">
+<title>Hattın Kaç Dakika Geç</title>
+<meta name="description" content="İstanbul otobüsleri planlanan saatte kalkıyor mu? İETT'nin açık verisinden, dakikada bir konumla ölçüldü.">
+<meta name="theme-color" content="#0b0b0a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Doto:wght@700;900&family=Barlow+Condensed:wght@500;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="stil.css">
 </head>
 <body>
-<header class="ust">
+
+<header class="pano" id="ust">
   <div class="kap">
-    <p class="ust-etiket">Açık veriyle ölçüm · İETT</p>
-    <h1>İstanbul otobüsleri planına ne kadar uyuyor?</h1>
-    <p class="giris">İETT'nin planlanan kalkış saatlerini otobüslerin dakikada bir yayımlanan konumlarıyla
-      karşılaştırıyoruz: hat başından ne zaman kalkıyorlar, duraklarda ne kadar bekletiyorlar.</p>
-    <div id="durum" class="durum" role="status"></div>
+    <div class="pano-ust">
+      <span class="kucuk-led">İSTANBUL · OTOBÜS</span>
+      <span class="kucuk-led yanip" id="durum-led">VERİ TOPLANIYOR</span>
+    </div>
+
+    <form class="hat-yaz" id="hat-form" autocomplete="off">
+      <label for="hat-girdi">Hattını yaz</label>
+      <div class="girdi-kap">
+        <input id="hat-girdi" list="hat-listesi" inputmode="text" placeholder="500T" maxlength="8" spellcheck="false">
+        <button type="submit">Göster</button>
+      </div>
+      <datalist id="hat-listesi"></datalist>
+      <div class="cipler" id="cipler" aria-label="İzlenen hatlar"></div>
+    </form>
+
+    <div class="tabela" id="tabela" aria-live="polite">
+      <div class="tabela-satir">
+        <span class="hat-rozet" id="t-hat">—</span>
+        <span class="tabela-yon" id="t-yon"></span>
+      </div>
+      <div class="led-buyuk" id="t-sayi"><span class="led-sayi">--</span><span class="led-birim">dk</span></div>
+      <p class="tabela-cumle" id="t-cumle">Yükleniyor…</p>
+      <p class="tabela-alt" id="t-alt"></p>
+    </div>
   </div>
 </header>
 
-<main class="kap">
-  <section aria-labelledby="b-hatlar">
-    <div class="bolum-bas">
-      <h2 id="b-hatlar">Hatlar</h2>
-      <p class="not" id="siralama-notu"></p>
-    </div>
-    <div class="tablo-kap">
-      <table id="hatlar" class="tablo">
-        <thead>
-          <tr>
-            <th scope="col">Hat</th>
-            <th scope="col" class="sayi" title="Planla eşleşen kalkış sayısı">Kalkış</th>
-            <th scope="col" class="sayi" title="Planlanan saate göre medyan; + geç">Medyan sapma</th>
-            <th scope="col" class="sayi" title="1 dk erken ile 5 dk geç arasında kalkanların payı">Dakik</th>
-            <th scope="col" class="sayi gizle-dar" title="Gözlem süresi içinde planlanan kalkışlardan gözlenen bir kalkışla eşleşenler">Gözlenen / planlı</th>
-            <th scope="col" class="sayi gizle-dar" title="Duraklarda tahmini bekleme, plana göre fazlası (medyan durak)">Fazladan bekleme</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+<main>
+  <section class="bolum" aria-labelledby="b-lig">
+    <div class="kap">
+      <p class="bolum-no">01</p>
+      <h2 id="b-lig">Hangi hat daha dakik?</h2>
+      <p class="bolum-giris" id="lig-giris"></p>
+      <ol class="lig" id="lig"></ol>
     </div>
   </section>
 
-  <section id="detay" aria-labelledby="b-detay" hidden>
-    <div class="bolum-bas">
-      <h2 id="b-detay"><span id="d-hat"></span> <span id="d-ad" class="soluk"></span></h2>
-      <label class="secici">Hat
-        <select id="hat-sec" aria-label="Hat seç"></select>
-      </label>
+  <section class="bolum" aria-labelledby="b-saat">
+    <div class="kap">
+      <p class="bolum-no">02</p>
+      <h2 id="b-saat"><span class="hat-yazi" data-hat-yazi></span> gün içinde ne zaman kayıyor?</h2>
+      <p class="bolum-giris">Her saat için planlanan kalkışa göre medyan sapma. Kesik çizgi: tam zamanında. Noktanın altındaki sayı o saatteki kalkış adedi.</p>
+      <div class="grafik" id="g-saat"></div>
     </div>
-    <div class="kartlar" id="d-kartlar"></div>
+  </section>
 
-    <div class="iki">
-      <figure class="kutu">
-        <figcaption>
-          <strong>Saat saat kalkış sapması</strong>
-          <span class="not">Planlanan kalkışa göre; çubuk medyan, çizgi çeyrekler arası. Altındaki sayı: kalkış adedi.</span>
-        </figcaption>
-        <div id="g-sapma" class="grafik"></div>
-      </figure>
-      <figure class="kutu">
-        <figcaption>
-          <strong>Durakta tahmini bekleme</strong>
-          <span class="not">Rastgele gelen yolcu için ortalama, tüm duraklar; dolu: gözlenen, çizgi: plana göre.</span>
-        </figcaption>
-        <div id="g-bekleme" class="grafik"></div>
-      </figure>
+  <section class="bolum" aria-labelledby="b-sefer">
+    <div class="kap">
+      <p class="bolum-no">03</p>
+      <h2 id="b-sefer">Planlanan seferlerin kaçını gördük?</h2>
+      <div class="iki-sayi" id="sefer-sayilar"></div>
+      <p class="bolum-giris">Görmediğimiz sefer <strong>gelmedi demek değil</strong>: GPS kesintisi, aracın bizim listemize geç girmesi ya da toplayıcının kapalı olması da bu oranı düşürür. Bu yüzden "hiç gelmeyen sefer" iddiası kurmuyoruz; birkaç hafta veriyle hat hat ayrıştıracağız.</p>
     </div>
+  </section>
 
-    <figure class="kutu">
-      <figcaption>
-        <strong>Harita</strong>
-        <span class="not">Durak rengi gözlenen tahmini beklemeyi gösterir. Durağa dokunun.</span>
-      </figcaption>
-      <div id="harita" role="region" aria-label="Hat haritası"></div>
+  <section class="bolum" aria-labelledby="b-bekle">
+    <div class="kap">
+      <p class="bolum-no">04</p>
+      <h2 id="b-bekle">Durakta ne kadar bekliyorsun?</h2>
+      <p class="bolum-giris">Durağa rastgele gelen yolcunun ortalama beklemesi. Otobüsler düzensiz gelirse, sayıları aynı kalsa bile bekleme uzar. Çubuk: gözlenen · çizgi: plana göre olması gereken.</p>
+      <div class="grafik" id="g-bekle"></div>
+      <div id="harita" role="region" aria-label="Hat haritası; duraklar bekleme süresine göre renkli"></div>
       <div class="lejant" id="lejant"></div>
-    </figure>
+    </div>
   </section>
 
-  <section class="yontem" aria-labelledby="b-yontem">
-    <h2 id="b-yontem">Nasıl ölçüyoruz</h2>
-    <ol>
-      <li><strong>Plan.</strong> İETT her güzergâh için yalnızca <em>hat başından kalkış</em> saatlerini yayımlıyor; ara duraklar için planlı saat yok. Bu yüzden "geç kaldı" ölçüsü hat başındaki kalkış için.</li>
-      <li><strong>Konum.</strong> Otobüs konumları dakikada bir yenileniyor. Her konumu güzergâh çizgisine izdüşürüp otobüsün hat başından çıktığı anı ve her duraktan geçtiği anı ara değerlemeyle buluyoruz.</li>
-      <li><strong>Eşleştirme.</strong> Gözlenen kalkışlar, aynı güzergâhın planlı kalkışlarıyla sırayı koruyarak eşleniyor (−10…+30 dk). "Dakik": 1 dk erken ile 5 dk geç arası.</li>
-      <li><strong>Bekleme.</strong> Bir durakta ardışık iki otobüs arasındaki süre <em>h</em> ise, rastgele gelen yolcunun ortalama beklemesi Σh²/(2Σh). Aralıklar düzensizleştikçe bekleme, otobüs sayısı aynı kalsa bile uzar. Planlı karşılığı aynı formülle, planlı kalkışlardan hesaplanıyor.</li>
-    </ol>
-    <h3>Sınırlar</h3>
-    <ul>
-      <li>Kalkış anı ±1 dk belirsiz (konum aralığı); dakika altı farklar yorumlanmamalı. Seyreltme testinde durak geçiş anı için hata medyan 4 sn, %90'ı 18 sn.</li>
-      <li>"Gözlenen / planlı" oranı <em>gelmeyen sefer</em> oranı değildir: GPS kesintisi, aracın eşlemeye geç girmesi ya da toplayıcının kapalı olması da eşleşmeyen sefer bırakır.</li>
-      <li>Konum servisi saatte 100 istekle sınırlı; bu yüzden şimdilik 10 hat izleniyor ve toplama yalnızca bilgisayar açıkken sürüyor. Gözlem saatleri yukarıda.</li>
-      <li>Hatlar arası sıralama, her hatta en az <span id="esik-kalkis"></span> kalkış ve <span id="esik-gun"></span> gün birikince gösteriliyor.</li>
-    </ul>
+  <section class="bolum" aria-labelledby="b-paylas">
+    <div class="kap">
+      <p class="bolum-no">05</p>
+      <h2 id="b-paylas">Tabelanı paylaş</h2>
+      <canvas id="kart" width="1200" height="630" aria-label="Paylaşım kartı önizlemesi"></canvas>
+      <div class="dugmeler">
+        <button type="button" id="paylas">Paylaş</button>
+        <button type="button" id="indir" class="ikincil">Görseli indir</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="bolum yontem" aria-labelledby="b-yontem">
+    <div class="kap">
+      <p class="bolum-no">i</p>
+      <h2 id="b-yontem">Nasıl ölçüyoruz, nerede yanılabiliriz</h2>
+      <ol>
+        <li><strong>Plan.</strong> İETT her güzergâh için yalnızca <em>hat başından kalkış</em> saatlerini yayımlıyor; ara duraklar için planlı saat yok. "Geç" ölçüsü bu yüzden hat başındaki kalkış için.</li>
+        <li><strong>Konum.</strong> Otobüs konumları dakikada bir yenileniyor. Her konumu güzergâh çizgisine izdüşürüp aracın hat başından çıktığı ve her duraktan geçtiği anı buluyoruz.</li>
+        <li><strong>Eşleştirme.</strong> Gözlenen kalkışlar aynı güzergâhın planlı kalkışlarıyla sırayı koruyarak eşleniyor (−10…+30 dk). "Dakik": 1 dk erken ile 5 dk geç arası.</li>
+        <li><strong>Bekleme.</strong> Ardışık iki otobüs arası <em>h</em> ise rastgele gelen yolcunun ortalama beklemesi Σh²/(2Σh). Planlı karşılığı aynı formülle planlı kalkışlardan.</li>
+      </ol>
+      <h3>Sınırlar</h3>
+      <ul>
+        <li>Kalkış anı ±1 dk belirsiz; dakika altı farklar yorumlanmamalı. Seyreltme testinde durak geçiş anı hatası medyan 4 sn, %90'ı 18 sn.</li>
+        <li>Konum servisi saatte 100 istekle sınırlı; bu yüzden 10 hat izleniyor ve toplama yalnızca bilgisayarımız açıkken sürüyor.</li>
+        <li>Hat ligi, her hatta en az <span id="esik-kalkis">40</span> kalkış ve <span id="esik-gun">5</span> gün birikince açılıyor. O zamana kadar sayılar ön sonuç.</li>
+        <li>Resmî tatiller ayrı işaretlenmiyor; gün tipi haftanın gününden.</li>
+      </ul>
+      <p class="kaynak">Kaynak: <a href="https://data.ibb.gov.tr">İBB Açık Veri Portalı</a> (İETT web servisleri, güzergâhlar, duraklar), <a href="https://data.ibb.gov.tr/license">İBB Açık Veri Lisansı</a>. Bu site İBB ya da İETT'nin değildir; ölçümler bize aittir. Harita © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> katkıcıları.</p>
+    </div>
   </section>
 </main>
 
-<footer class="alt">
-  <div class="kap">
-    <p>Kaynak: <a href="https://data.ibb.gov.tr">İBB Açık Veri Portalı</a> (İETT web servisleri, hat güzergâhları, duraklar), <a href="https://data.ibb.gov.tr/license">İBB Açık Veri Lisansı</a>. Bu site İBB ya da İETT'nin değildir; ölçümler bize aittir. Harita © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> katkıcıları.</p>
-  </div>
-</footer>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="uygulama.js"></script>
 </body>
